@@ -1,0 +1,14 @@
+export MONGO_INITDB_ROOT_USERNAME=test
+export MONGO_INITDB_ROOT_PASSWORD=abc123
+export MONGO_INITDB_DATABASE=blockers
+
+podman run --name mongodb \
+    -p 27017:27017 \
+    -e MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME \
+    -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD \
+    -e MONGO_INITDB_DATABASE=$MONGO_INITDB_DATABASE \
+    -d mongo:latest
+
+export MONGODB_URI=mongodb://test:abc123@localhost:27017/
+
+npm run dev
