@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 export async function addBlocker(blocker) {
     const client = await clientPromise;
 
-    const db = client.db("admin");
+    const db = client.db(process.env.MONGODB_DATBASE);
 
     const doc = {
         blocker_name: blocker
