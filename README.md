@@ -12,6 +12,23 @@ The startup.sh sets up a DB using docker and also sets up some environment varia
 
 For this to work you'll need to setup k3s: https://k3s.io/
 
+To setup the ashboard for k3s see these docs: https://docs.k3s.io/installation/kube-dashboard 
+
+To fetch the token run this:
+```shell
+sudo k3s kubectl -n kubernetes-dashboard create token admin-user
+```
+
+Exposing the dashboard url:
+```shell
+sudo k3s kubectl proxy
+```
+
+Finally it can be reached on:
+```shell
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+```
+
 ## Build and push the app image
 
 To build the application image I used pack cli from https://buildpacks.io/
