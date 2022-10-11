@@ -43,7 +43,7 @@ Now lets deploy our helm chart:
 ```shell
 helm -n wordcloud-app upgrade \
     wordcloud-app \
-    wordcloud-chart \
+    ./wordcloud-chart \
     --set wordcloudImage.repository=$DOCKER_HUB_NAME/wordcloud-app \
     --install \z
     --debug
