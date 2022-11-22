@@ -52,11 +52,20 @@ spec:
           - name: "MONGO_INITDB_ROOT_PASSWORD"
             value: "{{ .Values.mongoImage.password }}"
           - name: "MONGO_INITDB_DATABASE"
-            value: "{{ .Values.mongoImage.database }}"                        
+            value: "{{ .Values.mongoImage.database }}"
           ports:
             - name: db
               containerPort: 27017
-              protocol: TCP                  
+              protocol: TCP
+        - name: presentation
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.presentationImage.repository }}:{{ .Values.presentationImage.tag }}"
+          imagePullPolicy: {{ .Values.presentationImage.pullPolicy }}
+          ports:
+            - name: pres
+              containerPort: 8000
+              protocol: TCP
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

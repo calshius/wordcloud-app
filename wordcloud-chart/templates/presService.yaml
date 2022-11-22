@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordcloud-service
+  name: presentation-service
   labels:
     {{- include "wordcloud-chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.wordcloudPort }}
-      targetPort: http
+    - port: {{ .Values.service.presPort }}
+      targetPort: pres
       protocol: TCP
       name: http
   selector:

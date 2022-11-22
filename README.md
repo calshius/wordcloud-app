@@ -58,11 +58,11 @@ kubectl create namespace wordcloud-app
 Now lets deploy our helm chart:
 
 ```shell
-helm -n wordcloud-app upgrade \
+helm -n test-wordcloud upgrade \
     wordcloud-app \
     ./wordcloud-chart \
     --set wordcloudImage.repository=$DOCKER_HUB_NAME/wordcloud-app \
-    --install \z
+    --install \
     --debug
 ```
 
