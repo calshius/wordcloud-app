@@ -1,0 +1,10 @@
+1. Get the application URL by running these commands:
+
+    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+          You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "wordcloud-chart.fullname" . }}'
+export PRES_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} presentation-service --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
+export WC_SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} wordcloud-service --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
+echo http://$PRES_SERVICE_IP:{{ .Values.service.wordcloudPort }}
+echo http://$WC_SERVICE_IP:{{ .Values.service.presPort }}

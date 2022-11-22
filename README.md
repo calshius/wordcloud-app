@@ -12,22 +12,7 @@ The startup.sh sets up a DB using docker and also sets up some environment varia
 
 For this to work you'll need to setup k3s: https://k3s.io/
 
-To setup the ashboard for k3s see these docs: https://docs.k3s.io/installation/kube-dashboard 
-
-To fetch the token run this:
-```shell
-sudo k3s kubectl -n kubernetes-dashboard create token admin-user
-```
-
-Exposing the dashboard url:
-```shell
-sudo k3s kubectl proxy
-```
-
-Finally it can be reached on:
-```shell
-http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-```
+The dashboard tool I'm using is Octant: https://octant.dev/ 
 
 ## Build and push the app image
 
@@ -69,12 +54,12 @@ helm -n test-wordcloud upgrade \
 Once this has run you can hit your app on the ingress endpoint which you can fetch by running:
 
 ```shell
-export APP_ENDPOINT=$(kubectl get ing  test-wordcloud -wordcloud-chart -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-echo "Get the your app here: http://$APP_ENDPOINT "
+export PRES_SERVICE_IP=$(kubectl get svc --namespace test-wordcloud presentation-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+
+export WC_SERVICE_IP=$(kubectl get svc --namespace test-wordcloud wordcloud-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+
+echo http://$PRES_SERVICE_IP:8080
+echo http://$WC_SERVICE_IP:8081
 ```
 
 Now you're done! Woohoo!!
-
-# Disclaimer
-
-Wrote this to get used to using nextjs, this is just a learning thing.
