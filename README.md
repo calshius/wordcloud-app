@@ -23,11 +23,11 @@ To build the app  and push the image your self run this command:
 ```shell
 export DOCKER_HUB_NAME=your docker hub name
 
-pack build $DOCKER_HUB_NAME/test-wordcloud  \
+pack build $DOCKER_HUB_NAME/wordcloud-app \
     --env "MONGODB_URI=mongodb://test:abc123@0.0.0.0:27017/" \
     --builder paketobuildpacks/builder:base
 
-docker push $DOCKER_HUB_NAME/test-wordcloud 
+docker push $DOCKER_HUB_NAME/wordcloud-app
 ```
 
 ## Deploy to k3s
@@ -37,16 +37,16 @@ To deploy this application we're going to use helm v3.
 Lets create a namesapce using kubectl:
 
 ```shell
-kubectl create namespace test-wordcloud 
+kubectl create namespace wordcloud-app
 ```
 
 Now lets deploy our helm chart:
 
 ```shell
-helm -n test-wordcloud upgrade \
-    test-wordcloud  \
+helm -n wordcloud-app upgrade \
+    wordcloud-app \
     ./wordcloud-chart \
-    --set wordcloudImage.repository=$DOCKER_HUB_NAME/test-wordcloud  \
+    --set wordcloudImage.repository=$DOCKER_HUB_NAME/wordcloud-app \
     --install \
     --debug
 ```
@@ -54,9 +54,9 @@ helm -n test-wordcloud upgrade \
 Once this has run you can hit your app on the ingress endpoint which you can fetch by running:
 
 ```shell
-export PRES_SERVICE_IP=$(kubectl get svc --namespace test-wordcloud presentation-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+export PRES_SERVICE_IP=$(kubectl get svc --namespace wordcloud-apppresentation-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
 
-export WC_SERVICE_IP=$(kubectl get svc --namespace test-wordcloud wordcloud-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+export WC_SERVICE_IP=$(kubectl get svc --namespace wordcloud-appwordcloud-service --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
 
 echo http://$PRES_SERVICE_IP:8080
 echo http://$WC_SERVICE_IP:8081
