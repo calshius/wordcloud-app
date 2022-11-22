@@ -38,11 +38,11 @@ To build the app  and push the image your self run this command:
 ```shell
 export DOCKER_HUB_NAME=your docker hub name
 
-pack build $DOCKER_HUB_NAME/wordcloud-app \
+pack build $DOCKER_HUB_NAME/test-wordcloud  \
     --env "MONGODB_URI=mongodb://test:abc123@0.0.0.0:27017/" \
     --builder paketobuildpacks/builder:base
 
-docker push $DOCKER_HUB_NAME/wordcloud-app
+docker push $DOCKER_HUB_NAME/test-wordcloud 
 ```
 
 ## Deploy to k3s
@@ -52,16 +52,16 @@ To deploy this application we're going to use helm v3.
 Lets create a namesapce using kubectl:
 
 ```shell
-kubectl create namespace wordcloud-app
+kubectl create namespace test-wordcloud 
 ```
 
 Now lets deploy our helm chart:
 
 ```shell
 helm -n test-wordcloud upgrade \
-    wordcloud-app \
+    test-wordcloud  \
     ./wordcloud-chart \
-    --set wordcloudImage.repository=$DOCKER_HUB_NAME/wordcloud-app \
+    --set wordcloudImage.repository=$DOCKER_HUB_NAME/test-wordcloud  \
     --install \
     --debug
 ```
@@ -69,7 +69,7 @@ helm -n test-wordcloud upgrade \
 Once this has run you can hit your app on the ingress endpoint which you can fetch by running:
 
 ```shell
-export APP_ENDPOINT=$(kubectl get ing  wordcloud-app-wordcloud-chart -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+export APP_ENDPOINT=$(kubectl get ing  test-wordcloud -wordcloud-chart -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
 echo "Get the your app here: http://$APP_ENDPOINT "
 ```
 
